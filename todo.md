@@ -15,8 +15,15 @@ This needs to be well documented. Errors should be dealt with behind the scene, 
 
 ## Problem 4: If using lazy loading, what if JS doesn't work?
 If JS doesn't work the images won't be loaded, as they don't have a src attribute.
-- Set a src with a low quality image to be changed, so if JS breaks there at least something there instead of a blank space.
-- Get polyfills to work so the intersection observer is 100% supported (this makes jfs more failproof)
+-   Set a src with a low quality image to be changed, so if JS breaks there at least something there instead of a blank space.
+-   Get polyfills to work so the intersection observer is 100% supported (this makes jfs more failproof)
 
 ## Problem 5: when scrolling REALLY fast, an img without any width or height won't emit an event and won't lazyload
 Yh, idk what to do. Maybe give every lazy loaded image a set height and width?
+
+
+## Features
+-   Make it possible to add custom scroll objects
+-   Figure out how to pass options, and which options
+-   Make it possible to make a seperate observer for a certain type of object. 
+    Case: I want the lazyload of images to trigger just before they come into view, but i want my reveal animation to trigger when the element is partly entering the view.
