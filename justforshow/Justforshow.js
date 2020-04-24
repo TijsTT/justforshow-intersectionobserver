@@ -3,16 +3,6 @@ class JustForShow {
         console.log('Justforshow using the intersection observer API ...', '\n\n');
         
         this.options = this._setOptions(options);
-        this.scrollObjectTypes = [
-            {
-                selector: 'data-jfs-from',
-                create: entry => new AnimateFrom(entry)
-            },
-            {
-                selector: 'data-jfs-lazyload',
-                create: entry => new LazyLoadingImage(entry)
-            }
-        ];
 
         this.scrollPosition = this._getScrollPosition();
         this.scrollObjects = this._createScrollObjects();
@@ -23,14 +13,13 @@ class JustForShow {
     }
 
     _init() {
-        // this._setScrollPositionToTop();
         this._observeElements();
     }
 
     _createScrollObjects() {
         let scrollObjects = [];
 
-        this.scrollObjectTypes.forEach((scrollObjectType) => {
+        this.options.scrollObjectTypes.forEach((scrollObjectType) => {
             let elements = document.querySelectorAll(`[${scrollObjectType.selector}]`);
 
             elements.forEach((element) => {
@@ -97,6 +86,7 @@ class JustForShow {
 
     _setOptions(options) {
         return {
+            scrollObjectTypes: this._getAllScrollObjectTypes(options),
             observer: {
                 root: (options && options.observer && options.observer.root) ? options.observer.root : null,
                 rootMargin: (options && options.observer && options.observer.rootMargin) ? options.observer.rootMargin : '0px 0px 0px 0px',
@@ -105,15 +95,50 @@ class JustForShow {
         }
     }
 
-    _setScrollPositionToTop() {
-        // temporary fix for problem where elements are not revealed when scrolling up, because the page was loaded on a scrollposition down the page
-        // basicly, the scroll position is set to 0 before EVERY unload
-        window.addEventListener('beforeunload', () => {
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-            document.body.scrollTop = 0; // For Safari
-        })
+    _getAllScrollObjectTypes(options) {
+        let scrollObjectTypes = this._getPresetScrollObjectTypes();
+        let filteredObjectTypes = [];
+
+        if(options.scrollObjectTypes && typeof options.scrollObjectTypes == 'object') {
+            filteredObjectTypes = scrollObjectTypes.filter((scrollObjectType) => {
+                return scrollObjectType.name == options.scrollObjectTypes;
+            });
+            scrollObjectTypes = filteredObjectTypes;
+        }
+
+        if(options.customScrollObjectTypes && typeof options.customScrollObjectTypes == 'object') {
+            options.customScrollObjectTypes.forEach(customScrollObjectType => scrollObjectTypes.push(customScrollObjectType));
+        }
+
+        return scrollObjectTypes;
+    }
+
+    _getPresetScrollObjectTypes() {
+        return [
+            {
+                name: 'AnimateFrom',
+                selector: 'data-jfs-from',
+                create: entry => new AnimateFrom(entry)
+            },
+            {
+                name: 'LazyLoadingImage',
+                selector: 'data-jfs-lazyload',
+                create: entry => new LazyLoadingImage(entry)
+            }
+        ];
     }
 }
 
-new JustForShow({ observer: { rootMargin: "0px 0px -100px 0px"}});
+new JustForShow({ 
+    // scrollObjectTypes: ['AnimateFrom', 'LazyLoadingImage'],
+    customScrollObjectTypes: [],
+    observer: { rootMargin: "0px 0px -100px 0px"}
+});
+
+new JustForShow({
+    scrollObjectTypes: [],
+    customScrollObjectTypes: [{
+        selector: 'data-jfs-section-counter',
+        create: (entry) => new SectionCounter(entry)
+    }]
+})

@@ -20,8 +20,8 @@ class AnimateFrom extends ScrollObject {
         this._addFromClassesToElement();
         // this is for that one guy that actually tries to print a webpage (just why?)
         this._removeFromClassesBeforePrint();
-
-        this.moveToCurrentScrollPosition();
+        // atm part of the ScrollObject api
+        this.moveToCurrentScrollPosition(); 
     }
 
     onEnterBottom() {

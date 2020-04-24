@@ -4,21 +4,41 @@
         <link rel="stylesheet" href="./main.css">
     </head>
     <body>
+        <div style="position: fixed; font-weight: 700; font-size: 3em;"><span data-counter="0">0</span></div>
         <div style="min-height: 3000px;">
 
-            <div style="width: 100%; height: 1000px; background: white"></div>
+            <div data-jfs-section-counter style="width: 100%; height: 1000px; background: white"></div>
         
-            <div data-jfs-from="reveal-on-scroll" class="transition duration-500 ease bg-red" style="width: 100%; height: 200px;"></div>
+            <div data-jfs-section-counter data-jfs-from="reveal-on-scroll" class="transition duration-500 ease bg-red" style="width: 100%; height: 200px;"></div>
 
-            <div style="width: 100%; height: 200px; background: white"></div>
+            <div data-jfs-section-counter style="width: 100%; height: 200px; background: white"></div>
 
-            <img data-jfs-lazyload="https://thinktomorrow.be/media/953/conversions/smells-like-team-spitit-full.jpg" style="width: 100%; min-height: 200px; background: white" alt="Example">
+            <img data-jfs-lazyload="https://thinktomorrow.be/media/953/conversions/smells-like-team-spitit-full.jpg" style="width: 100%; min-height: 100px; background: white" alt="Example">
 
-            <div data-jfs-from="opacity-50" data-jfs-from-repeat class="transition duration-1000 ease" style="width: 100%; height: 200px; background: black"></div>
+            <div data-jfs-section-counter data-jfs-from="opacity-50" data-jfs-from-repeat class="transition duration-1000 ease" style="width: 100%; height: 200px; background: black"></div>
         
         </div>
 
         <script src="./justforshow/ScrollObject.js"></script>
+        <script>
+            class SectionCounter extends ScrollObject {
+                constructor(entry) {
+                    super(entry);
+
+                    this.counter = document.querySelector('[data-counter]');
+                    this.counted = false;
+                }
+                onLeaveTop() {
+                    if(this.counted) return;
+
+                    let count = parseInt(this.counter.getAttribute('data-counter'));
+                    count++;
+                    this.counter.setAttribute('data-counter', count);
+                    this.counter.innerHTML = count;
+                    this.counted = true;
+                }
+            }
+        </script>
         <script src="./justforshow/AnimateFrom.js"></script>
         <script src="./justforshow/LazyLoadingImage.js"></script>
         <script src="./justforshow/Justforshow.js"></script>
