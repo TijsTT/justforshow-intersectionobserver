@@ -1,5 +1,5 @@
 /* 
-    Aditional attributes for AnimateFromObject:
+    Aditional attributes for AnimateFrom:
     -   data-jfs-from-repeat
 */
 class AnimateFrom extends ScrollObject {
@@ -19,7 +19,7 @@ class AnimateFrom extends ScrollObject {
         // because we are animating from specified classes, we need to add them now and remove them on intersection
         this._addFromClassesToElement();
         // make sure that elements above the current scroll positions are in sync with the jfs scroll events
-        this._simulateScrollEventsBasedOnScrollPosition();
+        this._moveToCurrentScrollPosition();
         // this is for that one guy that actually tries to print a webpage (just why?)
         this._removeFromClassesBeforePrint();
     }
@@ -40,7 +40,7 @@ class AnimateFrom extends ScrollObject {
     }
 
     // needs to be checked on browser compatibility
-    _simulateScrollEventsBasedOnScrollPosition() {
+    _moveToCurrentScrollPosition() {
         let currentUserScrollPosition = {
             top: window.pageYOffset,
             bottom: window.pageYOffset + window.innerHeight
