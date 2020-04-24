@@ -20,6 +20,7 @@ If JS doesn't work the images won't be loaded, as they don't have a src attribut
 
 ## Problem 5: when scrolling REALLY fast, an img without any width or height won't emit an event and won't lazyload
 Yh, idk what to do. Maybe give every lazy loaded image a set height and width?
+(doc: https://www.sitepoint.com/five-techniques-lazy-load-images-website-performance/)
 
 
 ## Features
@@ -27,3 +28,4 @@ Yh, idk what to do. Maybe give every lazy loaded image a set height and width?
 -   Figure out how to pass options, and which options
 -   Make it possible to make a seperate observer for a certain type of object. 
     Case: I want the lazyload of images to trigger just before they come into view, but i want my reveal animation to trigger when the element is partly entering the view.
+    (OR init justforshow a second time and every time you init jfs you can pass the type of sccrollobject you want to use for that instance!!!)
