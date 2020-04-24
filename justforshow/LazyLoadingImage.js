@@ -3,6 +3,7 @@ class LazyLoadingImage extends ScrollObject {
         super(entry);
 
         console.log('Lazy loading this element: ', this.element);
+        this.moveToCurrentScrollPosition();
     }
 
     onEnterBottom() {

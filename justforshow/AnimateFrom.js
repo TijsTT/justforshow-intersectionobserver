@@ -18,10 +18,10 @@ class AnimateFrom extends ScrollObject {
     _init() {
         // because we are animating from specified classes, we need to add them now and remove them on intersection
         this._addFromClassesToElement();
-        // make sure that elements above the current scroll positions are in sync with the jfs scroll events
-        this._moveToCurrentScrollPosition();
         // this is for that one guy that actually tries to print a webpage (just why?)
         this._removeFromClassesBeforePrint();
+
+        this.moveToCurrentScrollPosition();
     }
 
     onEnterBottom() {
@@ -38,28 +38,7 @@ class AnimateFrom extends ScrollObject {
             this.intersected = false;
         }
     }
-
-    // needs to be checked on browser compatibility
-    _moveToCurrentScrollPosition() {
-        let currentUserScrollPosition = {
-            top: window.pageYOffset,
-            bottom: window.pageYOffset + window.innerHeight
-        }
-        let objectScrollPosition = {
-            top: this.element.getBoundingClientRect().top + currentUserScrollPosition.top,
-            bottom: this.element.getBoundingClientRect().bottom + currentUserScrollPosition.top
-        }
-        // console.log('object: ', objectScrollPosition, 'screen: ', currentUserScrollPosition);
-        if(objectScrollPosition.top < currentUserScrollPosition.bottom) { 
-            this.onEnterBottom(); 
-            console.log('Element already entered from bottom');
-        }
-        if(objectScrollPosition.bottom < currentUserScrollPosition.top) { 
-            this.onLeaveTop(); 
-            console.log('Element already left from top');
-        }
-    }
-
+     
     _addTransitionResetStyleToHead() {
         let head = document.head || document.getElementsByTagName('head')[0],
             style = document.createElement('style'),
