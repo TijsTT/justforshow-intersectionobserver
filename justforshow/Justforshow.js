@@ -1,36 +1,50 @@
 class JustForShow {
     constructor(options) {
-        console.log('Justforshow using the intersection observer API ...', '\n\n');
+        // console.log('Justforshow using the intersection observer API ...', '\n\n');
         
         this.options = this._setOptions(options);
 
+        if(!(this.type = this._setType())) { 
+            console.error('There is either no type set or the given type is invalid. What do you expect me to observer without a type?');
+            return;
+        };
+        
         this.scrollPosition = this._getScrollPosition();
         this.scrollObjects = this._createScrollObjects();
-        
         this.observer = this._createIntersectionObserver();
 
-        this._init();
-    }
-
-    _init() {
         this._observeElements();
     }
 
+    _setType() {
+        if(this.options.type === null) return false;
+
+        let type = null;
+
+        if(typeof this.options.type === 'string') {
+            let presetTypes = this._getPresetTypes();
+            type = presetTypes.find((presetType) => presetType.name === this.options.type);
+
+        } else if(typeof this.options.type === 'object' && this.options.type.name && this.options.type.create) {
+            type = this.options.type;
+        } 
+        
+        return type;
+    }
+
     _createScrollObjects() {
-        let scrollObjects = [];
+        let scrollObjects = [],
+            selector = `data-jfs-${this.type.name.replace(/ /g,'')}`,
+            elements = document.querySelectorAll(`[${selector}]`);
 
-        this.options.scrollObjectTypes.forEach((scrollObjectType) => {
-            let elements = document.querySelectorAll(`[${scrollObjectType.selector}]`);
-
-            elements.forEach((element) => {
-                scrollObjects.push(
-                    scrollObjectType.create({ 
-                        selector: scrollObjectType.selector, 
-                        element: element, 
-                    })
-                );
-            });
-        })
+        elements.forEach((element) => {
+            scrollObjects.push(
+                this.type.create({ 
+                    selector: selector, 
+                    element: element, 
+                })
+            );
+        });
         
         return scrollObjects;
     }
@@ -56,19 +70,19 @@ class JustForShow {
                 scrollObject = this._getObjectByEntry(entry);
     
             if(newScrollPosition > this.scrollPosition && entry.isIntersecting) {
-                console.log('Scrolling down enter ...');
+                // console.log('Scrolling down enter ...');
                 scrollObject.onEnterBottom();
             } 
             else if(newScrollPosition < this.scrollPosition && entry.isIntersecting) {
-                console.log('Scrolling up enter ...');
+                // console.log('Scrolling up enter ...');
                 scrollObject.onEnterTop();
             } 
             else if(newScrollPosition < this.scrollPosition && !entry.isIntersecting) {
-                console.log('Scrolling up leave ...');
+                // console.log('Scrolling up leave ...');
                 scrollObject.onLeaveBottom();
             } 
             else if(newScrollPosition > this.scrollPosition && !entry.isIntersecting) {
-                console.log('Scrolling down leave ...');
+                // console.log('Scrolling down leave ...');
                 scrollObject.onLeaveTop();
             }
     
@@ -86,7 +100,7 @@ class JustForShow {
 
     _setOptions(options) {
         return {
-            scrollObjectTypes: this._getAllScrollObjectTypes(options),
+            type: (options && options.type) ? options.type : null,
             observer: {
                 root: (options && options.observer && options.observer.root) ? options.observer.root : null,
                 rootMargin: (options && options.observer && options.observer.rootMargin) ? options.observer.rootMargin : '0px 0px 0px 0px',
@@ -95,34 +109,14 @@ class JustForShow {
         }
     }
 
-    _getAllScrollObjectTypes(options) {
-        let scrollObjectTypes = this._getPresetScrollObjectTypes();
-        let filteredObjectTypes = [];
-
-        if(options.scrollObjectTypes && typeof options.scrollObjectTypes == 'object') {
-            filteredObjectTypes = scrollObjectTypes.filter((scrollObjectType) => {
-                return scrollObjectType.name == options.scrollObjectTypes;
-            });
-            scrollObjectTypes = filteredObjectTypes;
-        }
-
-        if(options.customScrollObjectTypes && typeof options.customScrollObjectTypes == 'object') {
-            options.customScrollObjectTypes.forEach(customScrollObjectType => scrollObjectTypes.push(customScrollObjectType));
-        }
-
-        return scrollObjectTypes;
-    }
-
-    _getPresetScrollObjectTypes() {
+    _getPresetTypes() {
         return [
             {
-                name: 'AnimateFrom',
-                selector: 'data-jfs-from',
+                name: 'animate-from',
                 create: entry => new AnimateFrom(entry)
             },
             {
-                name: 'LazyLoadingImage',
-                selector: 'data-jfs-lazyload',
+                name: 'lazyload',
                 create: entry => new LazyLoadingImage(entry)
             }
         ];
@@ -130,15 +124,18 @@ class JustForShow {
 }
 
 new JustForShow({ 
-    // scrollObjectTypes: ['AnimateFrom', 'LazyLoadingImage'],
-    customScrollObjectTypes: [],
+    type: 'animate-from',
     observer: { rootMargin: "0px 0px -100px 0px"}
 });
 
-new JustForShow({
-    scrollObjectTypes: [],
-    customScrollObjectTypes: [{
-        selector: 'data-jfs-section-counter',
+new JustForShow({ 
+    type: 'lazyload',
+    observer: { rootMargin: "0px 0px -100px 0px"}
+});
+
+new JustForShow({ 
+    type: {
+        name: 'section-counter',
         create: (entry) => new SectionCounter(entry)
-    }]
-})
+    },
+});

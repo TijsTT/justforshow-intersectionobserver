@@ -23,11 +23,11 @@ class ScrollObject {
         // console.log('object: ', objectScrollPosition, 'screen: ', currentUserScrollPosition);
         if(objectScrollPosition.top < currentUserScrollPosition.bottom) { 
             this.onEnterBottom(); 
-            console.log('Element already entered from bottom');
+            // console.log('Element already entered from bottom');
         }
         if(objectScrollPosition.bottom < currentUserScrollPosition.top) { 
             this.onLeaveTop(); 
-            console.log('Element already left from top');
+            // console.log('Element already left from top');
         }
     }
 }
