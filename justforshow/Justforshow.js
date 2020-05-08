@@ -5,7 +5,7 @@ class JustForShow {
         this.options = this._setOptions(options);
 
         if(!(this.type = this._setType())) { 
-            console.error('There is either no type set or the given type is invalid. What do you expect me to observer without a type?');
+            console.error('JustForShow Error: There is either no type set or the given type is invalid. What do you expect me to observer without a type?');
             return;
         };
         
