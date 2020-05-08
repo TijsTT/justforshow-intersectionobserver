@@ -22,6 +22,8 @@ If JS doesn't work the images won't be loaded, as they don't have a src attribut
 Yh, idk what to do. Maybe give every lazy loaded image a set height and width?
 (doc: https://www.sitepoint.com/five-techniques-lazy-load-images-website-performance/)
 
+## Problem 6: lazyload image element load event fires before image actually gets replaced
+This event is triggered when the image that was set as src is loaded, but with large images there is a short delay between the load event and the visual image change. This makes designing a transition between the 2 images very difficult ... Do I make a transition and let users deal with the delay with large images or do i figure out why this is happening. Already took a short look into this and couldn't find anything.
 
 ## Features
 -   Make it possible to add custom scroll objects
