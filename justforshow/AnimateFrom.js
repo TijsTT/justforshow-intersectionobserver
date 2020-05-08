@@ -7,9 +7,8 @@ class AnimateFrom extends ScrollObject {
         super(entry);
 
         this.type = 'animateFrom';
-        this.repeatSelector = 'data-jfs-from-repeat';
-        this.classes = this.element.getAttribute(this.selector).split(' ');
-        this.repeat = (typeof this.element.getAttribute(this.repeatSelector) === "string");
+        this.classes = this.element.getAttribute(this.selector) ? this.element.getAttribute(this.selector).split(' ') : [];
+        this.repeat = (typeof this.element.getAttribute('data-jfs-from-repeat') === "string");
         this.intersected = false;
     
         this._init();
@@ -38,25 +37,14 @@ class AnimateFrom extends ScrollObject {
             this.intersected = false;
         }
     }
-     
-    _addTransitionResetStyleToHead() {
-        let head = document.head || document.getElementsByTagName('head')[0],
-            style = document.createElement('style'),
-            css = '.transition-none { transition: none !important; }'
-
-        style.type = 'text/css';
-        style.styleSheet ? style.styleSheet.cssText = css : style.appendChild(document.createTextNode(css));
-        head.appendChild(style);
-    }
 
     _addFromClassesToElement() {
-        this._addTransitionResetStyleToHead();
-
-        this.element.classList.add('transition-none');
+        // Adding these classes would trigger the transition, so we first disable that and enable it again after the classes are added
+        this.element.style.transition = "none";
         this.element.classList.add(...this.classes);
         // nasty trick to update CSS properties instantly to prevent transition-none properties from still being active
         void this.element.offsetHeight;
-        this.element.classList.remove('transition-none');
+        this.element.style.removeProperty('transition');
     }
 
     _removeFromClassesBeforePrint() {

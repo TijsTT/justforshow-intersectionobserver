@@ -12,8 +12,24 @@ body {
 
 .bg-red { background-color: red; }
 .bg-black { background-color: black !important; }
+.bg-grey { background-color: grey }
+
+.h-16 { height: 4rem };
 
 .reveal-on-scroll {
     opacity: 0;
     transform: translateY(20px);
+}
+
+.loading {
+    animation: Loading;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+}
+
+@keyframes Loading {
+    0% { opacity: 0.95; }
+    50% { opacity: 1; }
+    100% { opacity: 0.95; }
 }
