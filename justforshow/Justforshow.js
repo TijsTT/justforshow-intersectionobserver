@@ -122,20 +122,3 @@ class JustForShow {
         ];
     }
 }
-
-new JustForShow({ 
-    type: 'animate-from',
-    observer: { rootMargin: "0px 0px -100px 0px"}
-});
-
-new JustForShow({ 
-    type: 'lazyload',
-    observer: { rootMargin: "0px 0px -100px 0px"}
-});
-
-new JustForShow({ 
-    type: {
-        name: 'section-counter',
-        create: (entry) => new SectionCounter(entry)
-    },
-});

@@ -4,12 +4,12 @@
         <link rel="stylesheet" href="./main.css">
     </head>
     <body>
-        <div style="position: fixed; font-weight: 700; font-size: 3em;"><span data-counter="0">0</span></div>
+        <div style="position: fixed; font-weight: 700; font-size: 3em; z-index: 1000;"><span data-counter="0">0</span></div>
         <div style="min-height: 3000px;">
 
             <div data-jfs-section-counter style="width: 100%; height: 1000px; background: white"></div>
         
-            <div data-jfs-section-counter data-jfs-animate-from="reveal-on-scroll" class="transition duration-500 ease bg-red" style="width: 100%; height: 200px;"></div>
+            <div data-jfs-section-counter data-jfs-animate-from="reveal-on-scroll" class="transition duration-1000 ease bg-red" style="width: 100%; height: 200px;"></div>
 
             <div data-jfs-section-counter style="width: 100%; height: 200px; background: white"></div>
             
@@ -44,5 +44,36 @@
         <script src="./justforshow/AnimateFrom.js"></script>
         <script src="./justforshow/LazyLoadingImage.js"></script>
         <script src="./justforshow/Justforshow.js"></script>
+
+        <script>
+            new JustForShow({ 
+                type: 'animate-from',
+                observer: { rootMargin: "0px 0px 0px 0px"}
+            });
+
+            new JustForShow({ 
+                type: 'lazyload',
+                observer: { rootMargin: "0px 0px -200px 0px"}
+            });
+
+            new JustForShow({ 
+                type: {
+                    name: 'section-counter',
+                    create: (entry) => new SectionCounter(entry)
+                },
+            });
+
+            /* 
+                What if i want to have 2 instances of AnimateFrom with a different observer on the same page? 
+                That would look like this:
+            */
+            new JustForShow({ 
+                type: {
+                    name: 'animate-from-margin',
+                    create: (entry) => new AnimateFrom(entry)
+                },
+                observer: { rootMargin: "0px 0px -200px 0px"}
+            });
+        </script>
     </body>
 </html>

@@ -32,10 +32,10 @@ class AnimateFrom extends ScrollObject {
     }
 
     onLeaveBottom() {
-        if(this.repeat) {
-            this.element.classList.add(...this.classes);
-            this.intersected = false;
-        }
+        if(!this.repeat) return;
+
+        this.element.classList.add(...this.classes);
+        this.intersected = false;
     }
 
     _addFromClassesToElement() {
