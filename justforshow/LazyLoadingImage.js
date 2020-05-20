@@ -1,6 +1,6 @@
 class LazyLoadingImage extends ScrollObject {
-    constructor(entry) {
-        super(entry);
+    constructor(element, selector) {
+        super(element, selector);
 
         this.classes = this.element.getAttribute('data-jfs-lazyload-from') ? this.element.getAttribute('data-jfs-lazyload-from').split(' ') : [];
         this.intersected = false;

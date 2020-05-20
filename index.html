@@ -24,8 +24,8 @@
         <script src="./justforshow/ScrollObject.js"></script>
         <script>
             class SectionCounter extends ScrollObject {
-                constructor(entry) {
-                    super(entry);
+                constructor(element, selector) {
+                    super(element, selector);
 
                     this.counter = document.querySelector('[data-counter]');
                     this.counted = false;
@@ -48,32 +48,47 @@
         <script>
             new JustForShow({ 
                 type: 'animate-from',
-                observer: { rootMargin: "0px 0px 0px 0px"}
+                rootMargin: "0px 0px 0px 0px",
             });
 
             new JustForShow({ 
                 type: 'lazyload',
-                observer: { rootMargin: "0px 0px -200px 0px"}
+                rootMargin: "0px 0px -200px 0px"
             });
 
             new JustForShow({ 
                 type: {
                     name: 'section-counter',
-                    create: (entry) => new SectionCounter(entry)
-                },
+                    create: (element, selector) => new SectionCounter(element, selector)
+                }
             });
+
+            new JustForShow({
+                selector: 'console-logger',
+                onEnterBottom: function() {
+                    console.log('Entering from bottom...')
+                }
+            })
+
+            // new JustForShow({
+            //     type: 'something-custom',
+            //     onEnterBottom: function(entry) {
+            //         let element = entry.target;
+            //         console.log('Doing something custom...');
+            //     },
+            // });
 
             /* 
                 What if i want to have 2 instances of AnimateFrom with a different observer on the same page? 
                 That would look like this:
             */
-            new JustForShow({ 
-                type: {
-                    name: 'animate-from-margin',
-                    create: (entry) => new AnimateFrom(entry)
-                },
-                observer: { rootMargin: "0px 0px -200px 0px"}
-            });
+            // new JustForShow({ 
+            //     type: {
+            //         name: 'animate-from-margin',
+            //         create: (entry) => new AnimateFrom(entry)
+            //     },
+            //     observer: { rootMargin: "0px 0px -200px 0px"}
+            // });
         </script>
     </body>
 </html>

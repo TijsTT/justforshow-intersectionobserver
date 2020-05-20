@@ -1,7 +1,7 @@
 class ScrollObject {
-    constructor(entry) {
-        this.element = entry.element;
-        this.selector = entry.selector;
+    constructor(element, selector) {
+        this.element = element;
+        this.selector = selector;
     }
     onEnterBottom() { /* ... */ }
     onEnterTop() { /* ... */ }

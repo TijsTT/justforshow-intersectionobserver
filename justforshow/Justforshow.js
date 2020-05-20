@@ -4,10 +4,7 @@ class JustForShow {
         
         this.options = this._setOptions(options);
 
-        if(!(this.type = this._setType())) { 
-            console.error('JustForShow Error: There is either no type set or the given type is invalid. What do you expect me to observer without a type?');
-            return;
-        };
+        this.type = this._setType();
         
         this.scrollPosition = this._getScrollPosition();
         this.scrollObjects = this._createScrollObjects();
@@ -17,9 +14,9 @@ class JustForShow {
     }
 
     _setType() {
-        if(this.options.type === null) return false;
+        let type = this.options.type;
 
-        let type = null;
+        if(type == null) return type;
 
         if(typeof this.options.type === 'string') {
             let presetTypes = this._getPresetTypes();
@@ -39,10 +36,7 @@ class JustForShow {
 
         elements.forEach((element) => {
             scrollObjects.push(
-                this.type.create({ 
-                    selector: selector, 
-                    element: element, 
-                })
+                this.type.create(element, selector)
             );
         });
         
@@ -51,9 +45,9 @@ class JustForShow {
 
     _createIntersectionObserver() {
         return new IntersectionObserver(this._intersectionObserverCallback.bind(this), {
-            root: this.options.observer.root,
-            rootMargin: this.options.observer.rootMargin,
-            threshold: this.options.observer.threshold,
+            root: this.options.root,
+            rootMargin: this.options.rootMargin,
+            threshold: this.options.threshold,
         })
     }
 
@@ -64,26 +58,61 @@ class JustForShow {
         })
     }
 
+    _onEnterBottom(entry) {
+        if(typeof this.onEnterBottom == 'function') {
+            this.onEnterBottom(entry);
+        } else {
+            let scrollObject = this._getObjectByEntry(entry);
+            scrollObject.onEnterBottom();
+        }
+    }
+
+    _onEnterTop(entry) {
+        if(typeof this.onEnterTop == 'function') {
+            this.onEnterTop(entry);
+        } else {
+            let scrollObject = this._getObjectByEntry(entry);
+            scrollObject.onEnterTop();
+        }
+    }
+
+    _onLeaveBottom(entry) {
+        if(typeof this.onLeaveBottom == 'function') {
+            this.onLeaveBottom(entry);
+        } else {
+            let scrollObject = this._getObjectByEntry(entry);
+            scrollObject.onLeaveBottom();
+        }
+    }
+
+    _onLeaveTop(entry) {
+        if(typeof this.onLeaveTop == 'function') {
+            this.onLeaveTop(entry);
+        } else {
+            let scrollObject = this._getObjectByEntry(entry);
+            scrollObject.onLeaveTop();
+        }
+    }
+
     _intersectionObserverCallback(entries) {
         entries.forEach(entry => {
-            let newScrollPosition = this._getScrollPosition(),
-                scrollObject = this._getObjectByEntry(entry);
-    
+            let newScrollPosition = this._getScrollPosition();
+
             if(newScrollPosition > this.scrollPosition && entry.isIntersecting) {
                 // console.log('Scrolling down enter ...');
-                scrollObject.onEnterBottom();
+                this._onEnterBottom(entry);
             } 
             else if(newScrollPosition < this.scrollPosition && entry.isIntersecting) {
                 // console.log('Scrolling up enter ...');
-                scrollObject.onEnterTop();
+                this._onEnterTop(entry);
             } 
             else if(newScrollPosition < this.scrollPosition && !entry.isIntersecting) {
                 // console.log('Scrolling up leave ...');
-                scrollObject.onLeaveBottom();
+                this._onLeaveBottom(entry);
             } 
             else if(newScrollPosition > this.scrollPosition && !entry.isIntersecting) {
                 // console.log('Scrolling down leave ...');
-                scrollObject.onLeaveTop();
+                this._onLeaveTop(entry);
             }
     
             this.scrollPosition = newScrollPosition;
@@ -101,11 +130,10 @@ class JustForShow {
     _setOptions(options) {
         return {
             type: (options && options.type) ? options.type : null,
-            observer: {
-                root: (options && options.observer && options.observer.root) ? options.observer.root : null,
-                rootMargin: (options && options.observer && options.observer.rootMargin) ? options.observer.rootMargin : '0px 0px 0px 0px',
-                threshold: (options && options.observer && options.observer.threshold) ? options.observer.threshold : [0]
-            }
+
+            root: (options && options.root) ? options.root : null,
+            rootMargin: (options && options.rootMargin) ? options.rootMargin : '0px 0px 0px 0px',
+            threshold: (options && options.threshold) ? options.threshold : [0]
         }
     }
 
@@ -113,11 +141,11 @@ class JustForShow {
         return [
             {
                 name: 'animate-from',
-                create: entry => new AnimateFrom(entry)
+                create: (element, selector) => new AnimateFrom(element, selector)
             },
             {
                 name: 'lazyload',
-                create: entry => new LazyLoadingImage(entry)
+                create: (element, selector) => new LazyLoadingImage(element, selector)
             }
         ];
     }

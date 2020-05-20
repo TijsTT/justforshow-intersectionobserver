@@ -3,10 +3,9 @@
     -   data-jfs-from-repeat
 */
 class AnimateFrom extends ScrollObject {
-    constructor(entry) {
-        super(entry);
+    constructor(element, selector) {
+        super(element, selector);
 
-        this.type = 'animateFrom';
         this.classes = this.element.getAttribute(this.selector) ? this.element.getAttribute(this.selector).split(' ') : [];
         this.repeat = (typeof this.element.getAttribute('data-jfs-from-repeat') === "string");
         this.intersected = false;
