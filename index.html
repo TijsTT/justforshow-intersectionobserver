@@ -10,6 +10,10 @@
             <div data-logger style="width: 100%; height: 400px; background: white"></div>
             <div data-jfs data-jfs-from="opacity-50" class="transition duration-1000" style="width: 100%; height: 400px; background: grey"></div>
             <div data-logger style="width: 100%; height: 400px; background: white"></div>
+
+            <img src="./test_image_1.png" data-lazyload data-jfs-lazyload-from="loading" data-jfs-lazyload="https://images.unsplash.com/photo-1460485260172-af9d8b7c0c95?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=7952&q=80" style="width: 100%;" alt="Example">
+            
+            <div data-logger style="width: 100%; height: 400px; background: white"></div>
             <div data-jfs data-jfs-from="opacity-50" class="transition duration-1000" style="width: 100%; height: 400px; background: grey"></div>
             <div data-logger style="width: 100%; height: 400px; background: white"></div>
             <div data-jfs data-jfs-from="opacity-50" class="transition duration-1000" style="width: 100%; height: 400px; background: grey"></div>
@@ -19,7 +23,7 @@
 
             <div style="width: 100%; height: 200px; background: white"></div>
             
-            <img src="./test_image_1.png" data-jfs-lazyload-from="loading" data-jfs-lazyload="https://images.unsplash.com/photo-1460485260172-af9d8b7c0c95?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=7952&q=80" style="width: 100%;" alt="Example">
+            
             
             <div style="width: 100%; height: 200px; background: white"></div>
 
@@ -27,10 +31,10 @@
         
         </div>
 
-        <!-- <script>
-            class SectionCounter extends ScrollObject {
-                constructor(element, selector) {
-                    super(element, selector);
+        <script>
+            class SectionCounter {
+                constructor(element) {
+                    this.element = element;
 
                     this.counter = document.querySelector('[data-counter]');
                     this.counted = false;
@@ -45,55 +49,48 @@
                     this.counted = true;
                 }
             }
-        </script> -->
+        </script>
+
         <script src="./justforshow/AnimateFrom.js"></script>
         <script src="./justforshow/LazyLoadingImage.js"></script>
         <script src="./justforshow/Justforshow.js"></script>
 
-        <!-- <script>
-            new JustForShow({ 
-                type: 'animate-from',
-                rootMargin: "0px 0px 0px 0px",
-            });
-
-            new JustForShow({ 
-                type: 'lazyload',
-                rootMargin: "0px 0px -200px 0px"
-            });
-
-            new JustForShow({ 
-                type: {
-                    name: 'section-counter',
-                    create: (element, selector) => new SectionCounter(element, selector)
-                }
-            });
-
-            new JustForShow({
-                selector: 'console-logger',
-                onEnterBottom: function() {
-                    console.log('Entering from bottom...')
+        <script>
+            new JustForShow('[data-jfs]', {
+                /* default settings */
+                preset: 'animate-from',
+                syncScrollPosition: true,
+                root: null,
+                rootMargin: '0px 0px 0px 0px',
+                threshold: [0],
+                onEnterBottom: (element) => {
+                    console.log(element);
                 }
             })
 
-            // new JustForShow({
-            //     type: 'something-custom',
-            //     onEnterBottom: function(entry) {
-            //         let element = entry.target;
-            //         console.log('Doing something custom...');
-            //     },
-            // });
+            new JustForShow('[data-lazyload]', {
+                preset: 'lazyload'
+            })
 
-            /* 
-                What if i want to have 2 instances of AnimateFrom with a different observer on the same page? 
-                That would look like this:
-            */
-            // new JustForShow({ 
-            //     type: {
-            //         name: 'animate-from-margin',
-            //         create: (entry) => new AnimateFrom(entry)
-            //     },
-            //     observer: { rootMargin: "0px 0px -200px 0px"}
-            // });
-        </script> -->
+            new JustForShow('[data-logger]', {
+                onEnterBottom: function(element) {
+                    console.log('Scrolling down enter ...');
+                },
+                onEnterTop: function(element) {
+                    console.log('Scrolling up enter ...');
+                },
+                onLeaveTop: function(element) {
+                    console.log('Scrolling up leave ...');
+                },
+                onLeaveBottom: function(element) {
+                    console.log('Scrolling down leave ...');
+                }
+            })
+
+            new JustForShow('[data-section-counter]', {
+                preset: (element) => new SectionCounter(element),
+            });
+        </script>
+
     </body>
 </html>
