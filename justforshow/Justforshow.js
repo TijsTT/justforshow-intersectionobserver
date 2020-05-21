@@ -5,11 +5,14 @@ class JustForShow {
         this.selector = selector;
 
         if(!this.selector || typeof this.selector != 'string') {
-            console.error('If you don\'t give me an element to observe, what am I even here for? Why are we here anyway?');
+            console.error('JustForShow: If you don\'t give me an element to observe, what am I even here for? Why are we here anyway?');
             return;
         }
 
-        this.options = this._setOptions(options);
+        if(!(this.options = this._setOptions(options))) {
+            console.error('JustForShow: The options you defined are not valid or empty. Without valid options my existence is meaningless.');
+            return;
+        }
 
         this.preset = this.options.preset;
         this.syncScrollPosition = this.options.syncScrollPosition;
@@ -165,8 +168,14 @@ class JustForShow {
     }
 
     _setOptions(options) {
+        /* If options aren't passed as either a string, function or object then setting them will result in a failure anyway */
+        if(!(typeof options == 'string' || typeof options == 'function' || typeof options == 'object')) return null;
+
+        /* If options are passed as a string or a function we assume it will be a preset */
+        if(typeof options == 'string' || typeof options == 'function') options = { preset: options };
+
         return {
-            preset: this._setPresetOption(options.preset),
+            preset: (options && options.preset) ? this._setPresetOption(options.preset) : null,
             syncScrollPosition: (options && options.syncScrollPosition != undefined) ? options.syncScrollPosition : true,
 
             root: (options && options.root) ? options.root : null,
@@ -181,13 +190,17 @@ class JustForShow {
     }
 
     _setPresetOption(preset) {
+        let presetType = null;
+
         if(typeof preset == 'string') {
-            let presetType = this._getPresetTypes().find((presetType) => presetType.name === preset);
-            return presetType.create;
+            presetType = this._getPresetTypes().find((presetType) => presetType.name === preset);
+            presetType ? presetType = presetType.create : presetType = null;
         } else if(typeof preset == 'function') {
-            return preset;
-        } else {
-            return null;
+            presetType = preset;
         }
+
+        if(!presetType) console.error('JustForShow: The preset you defined is invalid. Only listeners defined in JFS options will be fired.');
+
+        return presetType;
     }
 }

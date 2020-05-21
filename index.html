@@ -5,32 +5,25 @@
     </head>
     <body>
         <div style="position: fixed; font-weight: 700; font-size: 3em; z-index: 1000;"><span data-counter="0">0</span></div>
+        
         <div style="min-height: 3000px;">
-
-            <div data-logger style="width: 100%; height: 400px; background: white"></div>
-            <div data-jfs data-jfs-from="opacity-50" class="transition duration-1000" style="width: 100%; height: 400px; background: grey"></div>
-            <div data-logger style="width: 100%; height: 400px; background: white"></div>
+            <div data-section data-logger style="width: 100%; height: 400px; background: white"></div>
+            <div data-section data-jfs data-jfs-from="opacity-50" class="transition duration-1000" style="width: 100%; height: 400px; background: grey"></div>
+            <div data-section data-logger style="width: 100%; height: 400px; background: white"></div>
 
             <img src="./test_image_1.png" data-lazyload data-jfs-lazyload-from="loading" data-jfs-lazyload="https://images.unsplash.com/photo-1460485260172-af9d8b7c0c95?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=7952&q=80" style="width: 100%;" alt="Example">
             
-            <div data-logger style="width: 100%; height: 400px; background: white"></div>
-            <div data-jfs data-jfs-from="opacity-50" class="transition duration-1000" style="width: 100%; height: 400px; background: grey"></div>
-            <div data-logger style="width: 100%; height: 400px; background: white"></div>
-            <div data-jfs data-jfs-from="opacity-50" class="transition duration-1000" style="width: 100%; height: 400px; background: grey"></div>
-            <div data-logger style="width: 100%; height: 400px; background: white"></div>
-
-            <!-- <div data-jfs data-jfs-animate-from="reveal-on-scroll" class="transition duration-1000 ease bg-red" style="width: 100%; height: 200px;"></div>
-
-            <div style="width: 100%; height: 200px; background: white"></div>
-            
-            
-            
-            <div style="width: 100%; height: 200px; background: white"></div>
-
-            <div data-jfs-animate-from="opacity-50" data-jfs-from-repeat class="transition duration-1000 ease" style="width: 100%; height: 200px; background: black"></div> -->
-        
+            <div data-section data-logger style="width: 100%; height: 400px; background: white"></div>
+            <div data-section data-jfs data-jfs-from="opacity-50" class="transition duration-1000" style="width: 100%; height: 400px; background: grey"></div>
+            <div data-section data-logger style="width: 100%; height: 400px; background: white"></div>
+            <div data-section data-jfs data-jfs-from="opacity-50" class="transition duration-1000" style="width: 100%; height: 400px; background: grey"></div>
+            <div data-section data-logger style="width: 100%; height: 400px; background: white"></div>
         </div>
 
+        <script src="./justforshow/Justforshow.js"></script>
+        <script src="./justforshow/AnimateFrom.js"></script>
+        <script src="./justforshow/LazyLoadingImage.js"></script>
+        
         <script>
             class SectionCounter {
                 constructor(element) {
@@ -51,26 +44,20 @@
             }
         </script>
 
-        <script src="./justforshow/AnimateFrom.js"></script>
-        <script src="./justforshow/LazyLoadingImage.js"></script>
-        <script src="./justforshow/Justforshow.js"></script>
-
         <script>
             new JustForShow('[data-jfs]', {
                 /* default settings */
                 preset: 'animate-from',
                 syncScrollPosition: true,
                 root: null,
-                rootMargin: '0px 0px 0px 0px',
+                rootMargin: '0px 0px -200px 0px',
                 threshold: [0],
                 onEnterBottom: (element) => {
                     console.log(element);
                 }
-            })
+            });
 
-            new JustForShow('[data-lazyload]', {
-                preset: 'lazyload'
-            })
+            new JustForShow('[data-lazyload]', 'lazyload');
 
             new JustForShow('[data-logger]', {
                 onEnterBottom: function(element) {
@@ -85,10 +72,11 @@
                 onLeaveBottom: function(element) {
                     console.log('Scrolling down leave ...');
                 }
-            })
+            });
 
-            new JustForShow('[data-section-counter]', {
+            new JustForShow('[data-section]', {
                 preset: (element) => new SectionCounter(element),
+                syncScrollPosition: false
             });
         </script>
 
