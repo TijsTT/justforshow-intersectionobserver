@@ -3,19 +3,6 @@ body {
     margin: 0;
 }
 
-.transition { transition: all; }
-.duration-500 { transition-duration: .5s; }
-.duration-1000 { transition-duration: 1s; }
-.ease { transition-timing-function: ease; }
-.opacity-0 { opacity: 0; }
-.opacity-50 { opacity: 0.5; }
-
-.bg-red { background-color: red; }
-.bg-black { background-color: black !important; }
-.bg-grey { background-color: grey }
-
-.h-16 { height: 4rem };
-
 .loading {
     animation: Loading;
     animation-duration: 1s;
@@ -29,7 +16,15 @@ body {
     100% { opacity: 0.95; }
 }
 
-.reveal-on-scroll {
-    opacity: 0;
-    transform: translateY(20px);
-}
+.transition { transition: all; }
+.duration-500 { transition-duration: .5s; }
+.duration-1000 { transition-duration: 1s; }
+.ease { transition-timing-function: ease; }
+.opacity-0 { opacity: 0; }
+.opacity-50 { opacity: 0.5; }
+
+.bg-red { background-color: red; }
+.bg-black { background-color: black !important; }
+.bg-grey { background-color: grey }
+
+.h-16 { height: 4rem };
