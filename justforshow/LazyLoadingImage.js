@@ -1,8 +1,12 @@
-class LazyLoadingImage extends ScrollObject {
-    constructor(element, selector) {
-        super(element, selector);
+class LazyLoadingImage {
+    constructor(element) {
+        this.element = element;
 
-        this.classes = this.element.getAttribute('data-jfs-lazyload-from') ? this.element.getAttribute('data-jfs-lazyload-from').split(' ') : [];
+        this._lazyloadAttribute = 'data-jfs-lazyload';
+        this._lazyloadFromAttribute = 'data-jfs-lazyload-from';
+
+        this.src = this.element.getAttribute(this._lazyloadAttribute);
+        this.classes = this.element.getAttribute(this._lazyloadFromAttribute) ? this.element.getAttribute(this._lazyloadFromAttribute).split(' ') : [];
         this.intersected = false;
 
         this._setPlaceholderClasses();
@@ -12,7 +16,7 @@ class LazyLoadingImage extends ScrollObject {
     onEnterBottom() {
         if(this.intersected) return;
         
-        this.element.src = this.element.getAttribute(this.selector);
+        this.element.src = this.src;
 
         this.element.addEventListener('load', () => {
             // console.log('Removing classes ...');

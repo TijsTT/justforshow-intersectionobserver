@@ -2,12 +2,15 @@
     Aditional attributes for AnimateFrom:
     -   data-jfs-from-repeat
 */
-class AnimateFrom extends ScrollObject {
-    constructor(element, selector) {
-        super(element, selector);
+class AnimateFrom {
+    constructor(element) {
+        this.element = element;
 
-        this.classes = this.element.getAttribute(this.selector) ? this.element.getAttribute(this.selector).split(' ') : [];
-        this.repeat = (typeof this.element.getAttribute('data-jfs-from-repeat') === "string");
+        this._animateFromAttribute = 'data-jfs-from';
+        this._animateRepeatAttribute = 'data-jfs-repeat';
+
+        this.classes = this.element.getAttribute(this._animateFromAttribute) ? this.element.getAttribute(this._animateFromAttribute).split(' ') : [];
+        this.repeat = (typeof this.element.getAttribute(this._animateRepeatAttribute) === "string");
         this.intersected = false;
     
         this._init();
@@ -18,8 +21,6 @@ class AnimateFrom extends ScrollObject {
         this._addFromClassesToElement();
         // this is for that one guy that actually tries to print a webpage (just why?)
         this._removeFromClassesBeforePrint();
-        // atm part of the ScrollObject api
-        this.moveToCurrentScrollPosition(); 
     }
 
     onEnterBottom() {
