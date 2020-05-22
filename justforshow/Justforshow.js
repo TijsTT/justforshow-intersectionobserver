@@ -105,7 +105,7 @@ class JustForShow {
     _intersectionObserverCallback(entries) {
         entries.forEach(entry => {
             let newScrollPosition = this._getScrollPosition(),
-                instance = this._getInstanceByElement(entry.target);
+                instance = this.instances.find(instance => instance.element == entry.target);
 
             /* If this is the first callback for this instance then don't do anything, because this was the initial callback when observing the element started */
             if(!instance.observating) {
@@ -127,22 +127,11 @@ class JustForShow {
         });
     }
 
-    _getInstanceByElement(element) {
-        return this.instances.find(instance => instance.element == element);
-    }
-
     _getScrollPosition() {
         return window.pageYOffset || document.documentElement.scrollTop;
     }
 
-    _getPresetTypes() {
-        return [
-            { name: 'animate-from', create: (element) => new AnimateFrom(element) },
-            { name: 'lazyload', create: (element) => new LazyLoadingImage(element) }
-        ];
-    }
-
-    // this method can be called in childs of the ScrollObject classes
+    // this method can be called in children of the ScrollObject classes
     // makes sure that elements above the current scroll positions are in sync with the jfs scroll event 
     // needs to be checked on browser compatibility
     _syncToCurrentScrollPosition() {
@@ -202,5 +191,12 @@ class JustForShow {
         if(!presetType) console.error('JustForShow: The preset you defined is invalid. Only listeners defined in JFS options will be fired.');
 
         return presetType;
+    }
+
+    _getPresetTypes() {
+        return [
+            { name: 'animate-from', create: (element) => new AnimateFrom(element) },
+            { name: 'lazyload', create: (element) => new LazyLoadingImage(element) }
+        ];
     }
 }
